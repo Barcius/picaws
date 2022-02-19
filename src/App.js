@@ -1,12 +1,16 @@
 import logo from './logo.svg';
 import './App.css';
+import Amplify, { API } from 'aws-amplify';
 import { useState, useEffect } from 'react';
+
+const testAPI = "api63d26777";
+const path = "/test";
 
 function App() {
   const [data, setData] = useState(null);
 
   useEffect(() => {
-    fetch("/test")
+    API.get(testAPI, path)
       .then((res) => res.json())
       .then((data) => setData(data.message));
   }, []);
