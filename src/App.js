@@ -3,7 +3,7 @@ import './App.css';
 import Amplify, { API } from 'aws-amplify';
 import { useState, useEffect } from 'react';
 
-const testAPI = "api63d26777";
+const testAPI = "test";
 const path = "/test";
 
 function App() {
@@ -11,8 +11,7 @@ function App() {
 
   useEffect(() => {
     API.get(testAPI, path)
-      .then((res) => res.json())
-      .then((data) => setData(data.message));
+      .then((res) => setData(res));
   }, []);
 
   return (
