@@ -1,4 +1,8 @@
+const { S3Client, PutObjectCommand } = require("@aws-sdk/client-s3");
 const { RDSDataClient, ExecuteStatementCommand } = require("@aws-sdk/client-rds-data");
+
+
+const rdsClient = new RDSDataClient({ region: 'eu-central-1' });
 
 const rdsParams = {
   // resourceArn: 'arn:aws:rds:eu-central-1:691517806851:db:picaws-db', /* required */
@@ -8,6 +12,9 @@ const rdsParams = {
   database: 'picaws',
   includeResultMetadata: true,
 }
+
+const Bucket = 'amplify-picaws-dev-122306-deployment';
+const s3Client = new S3Client({ region: 'eu-central-1' });
 
 const parseRDSdata = (input) => {
   let columns = input.columnMetadata.map(c => { return { name: c.name, typeName: c.typeName }; });
@@ -36,8 +43,7 @@ const parseRDSdata = (input) => {
         const command = new ExecuteStatementCommand({ ...rdsParams, sql });
         let data;
         try {
-          const client = new RDSDataClient({ region: "eu-central-1" });
-          data = await client.send(command);
+          data = await rdsClient.send(command);
         } catch (e) {
           return {
             statusCode: 500,
@@ -57,13 +63,30 @@ const parseRDSdata = (input) => {
           body: JSON.stringify(parseRDSdata(data)),
         };
       case 'POST':
+        let result;
+        try {
+          result = await s3Client.send(new PutObjectCommand({
+            Bucket,
+            Key: 'images/test.txt',
+            Body: 'test test'
+          }));
+        } catch (e) {
+          return {
+            statusCode: 500,
+            headers: {
+              "Access-Control-Allow-Origin": "*",
+              "Access-Control-Allow-Headers": "*"
+            },
+            body: JSON.stringify(e.toString()),
+          };
+        }
         return {
           statusCode: 200,
           headers: {
             "Access-Control-Allow-Origin": "*",
             "Access-Control-Allow-Headers": "*"
           },
-          body: JSON.stringify(event),
+          body: JSON.stringify(result),
         };
       default:
         return {
