@@ -89,12 +89,12 @@
         "RoleName": {
           "Fn::If": [
             "ShouldNotCreateEnvResources",
-            "picawsLambdaRole64e384db",
+            "picawsLambdaRole2aca1275",
             {
               "Fn::Join": [
                 "",
                 [
-                  "picawsLambdaRole64e384db",
+                  "picawsLambdaRole2aca1275",
                   "-",
                   {
                     "Ref": "env"
