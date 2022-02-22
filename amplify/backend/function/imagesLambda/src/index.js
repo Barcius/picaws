@@ -68,7 +68,27 @@ const parseRDSdata = (input) => {
       case 'POST':
         let result;
         try {
-          result = event;
+          const body = JSON.parse(event.body);
+          const sql = 'insert into Images (name, s3bucket, s3path) values (:name, :bucket, :path)';
+          const command = new ExecuteStatementCommand({
+            ...rdsParams,
+            sql,
+            parameters: [
+              {
+                name: 'name',
+                value: { stringValue: body.name }
+              },
+              {
+                name: 'bucket',
+                value: { stringValue: body.bucket }
+              },
+              {
+                name: 'path',
+                value: { stringValue: body.path }
+              },
+            ]
+          });
+          result = await rdsClient.send(command);;
           // result = await s3Client.send(new PutObjectCommand({
           //   ...s3Params,
           //   Key: 'images/test.txt',
