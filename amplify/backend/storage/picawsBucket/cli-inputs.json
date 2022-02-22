@@ -1,0 +1,16 @@
+{
+  "resourceName": "picawsBucket",
+  "policyUUID": "62d6d1c8",
+  "bucketName": "picawsbucket",
+  "storageAccess": "authAndGuest",
+  "guestAccess": [
+    "READ"
+  ],
+  "authAccess": [
+    "CREATE_AND_UPDATE",
+    "READ",
+    "DELETE"
+  ],
+  "triggerFunction": "NONE",
+  "groupAccess": {}
+}

@@ -25,8 +25,12 @@
         },
         "imagesLambda": {
           "deploymentBucketName": "amplify-picaws-dev-122306-deployment",
-          "s3Key": "amplify-builds/imagesLambda-57686764566150394958-build.zip"
+          "s3Key": "amplify-builds/imagesLambda-6971476c41534c637348-build.zip"
         }
+      },
+      "auth": {
+        "picaws4f786e98": {},
+        "true": {}
       }
     }
   }

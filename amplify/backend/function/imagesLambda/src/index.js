@@ -1,8 +1,8 @@
 const { S3Client, PutObjectCommand } = require("@aws-sdk/client-s3");
 const { RDSDataClient, ExecuteStatementCommand } = require("@aws-sdk/client-rds-data");
 
-
-const rdsClient = new RDSDataClient({ region: 'eu-central-1' });
+const region = 'eu-central-1';
+const rdsClient = new RDSDataClient({ region });
 
 const rdsParams = {
   // resourceArn: 'arn:aws:rds:eu-central-1:691517806851:db:picaws-db', /* required */
@@ -13,8 +13,11 @@ const rdsParams = {
   includeResultMetadata: true,
 }
 
-const Bucket = 'amplify-picaws-dev-122306-deployment';
-const s3Client = new S3Client({ region: 'eu-central-1' });
+const s3Params = {
+  Bucket: 'amplify-picaws-dev-122306-deployment',
+  ACL: 'public-read',
+};
+const s3Client = new S3Client({ region });
 
 const parseRDSdata = (input) => {
   let columns = input.columnMetadata.map(c => { return { name: c.name, typeName: c.typeName }; });
@@ -65,11 +68,12 @@ const parseRDSdata = (input) => {
       case 'POST':
         let result;
         try {
-          result = await s3Client.send(new PutObjectCommand({
-            Bucket,
-            Key: 'images/test.txt',
-            Body: 'test test'
-          }));
+          result = event;
+          // result = await s3Client.send(new PutObjectCommand({
+          //   ...s3Params,
+          //   Key: 'images/test.txt',
+          //   Body: 'test test'
+          // }));
         } catch (e) {
           return {
             statusCode: 500,
