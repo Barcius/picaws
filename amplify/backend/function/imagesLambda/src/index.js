@@ -1,4 +1,3 @@
-const { S3Client, PutObjectCommand } = require("@aws-sdk/client-s3");
 const { RDSDataClient, ExecuteStatementCommand } = require("@aws-sdk/client-rds-data");
 
 const region = 'eu-central-1';
@@ -12,12 +11,6 @@ const rdsParams = {
   database: 'picaws',
   includeResultMetadata: true,
 }
-
-const s3Params = {
-  Bucket: 'amplify-picaws-dev-122306-deployment',
-  ACL: 'public-read',
-};
-const s3Client = new S3Client({ region });
 
 const parseRDSdata = (input) => {
   let columns = input.columnMetadata.map(c => { return { name: c.name, typeName: c.typeName }; });

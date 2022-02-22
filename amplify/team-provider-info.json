@@ -25,7 +25,7 @@
         },
         "imagesLambda": {
           "deploymentBucketName": "amplify-picaws-dev-122306-deployment",
-          "s3Key": "amplify-builds/imagesLambda-3663316e4f5070652f67-build.zip"
+          "s3Key": "amplify-builds/imagesLambda-43616f7a317a77696670-build.zip"
         },
         "S3Triggerfc320ce6": {
           "deploymentBucketName": "amplify-picaws-dev-122306-deployment",
@@ -33,7 +33,7 @@
         },
         "S3Trigger1d9e3ad2": {
           "deploymentBucketName": "amplify-picaws-dev-122306-deployment",
-          "s3Key": "amplify-builds/S3Trigger1d9e3ad2-4166624e556745654432-build.zip"
+          "s3Key": "amplify-builds/S3Trigger1d9e3ad2-37446975345132742b44-build.zip"
         }
       },
       "auth": {

@@ -55,7 +55,28 @@ exports.handler = async function (event) {
         ]
         const command = new ExecuteStatementCommand({ ...rdsParams, sql, parameters });
         result = await rdsClient.send(command);
-        console.log(result)
+        const imageId = result.records[0][0].longValue;
+        const insertSql = 'insert into Metadatas (latitude, longitude, altitude, image_id) values (:lat, :lon, :alt, :imgid)';
+        const insertParams = [
+          {
+            name: 'lat',
+            value: { longValue: +exifData.GPSLatitude.description }
+          },
+          {
+            name: 'lon',
+            value: { longValue: +exifData.GPSLongitude.description }
+          },
+          {
+            name: 'alt',
+            value: { longValue: +exifData.GPSLatitude.description }
+          },
+          {
+            name: 'imgid',
+            value: { longValue: +imageId }
+          }
+        ]
+        console.log(JSON.stringify(insertParams, null, 2));
+        return await rdsClient.send(new ExecuteStatementCommand({ ...rdsParams, sql: insertSql, parameters: insertParams }));
       }
     } catch (e) {
       console.log('Error: ' + e.message)
