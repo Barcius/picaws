@@ -10,6 +10,7 @@ import TabContext from '@mui/lab/TabContext';
 import TabList from '@mui/lab/TabList';
 import TabPanel from '@mui/lab/TabPanel';
 import ImageList from './ImageList';
+import exif from 'exifreader';
 
 
 const testAPI = "test";
@@ -40,21 +41,22 @@ function App() {
   const onClick = async (e) => {
     const file = input.current.files[0];
     if (!file) return;
-    setIsUploading(true);
-    try {
-      const res = await Amplify.Storage.put(`images/${uuidv4()}`, file, { acl: 'public-read' });
-      const fres = await API.post(imageAPI, imgaePath, { body: {
-        name: file.name,
-        bucket: aws.aws_user_files_s3_bucket,
-        path: res.key,
-      }});
-      console.log(fres);
-      img.current.src = '';
-      input.current.value = null;
-    } catch (e) {
-      enqueueSnackbar(e.message, {variant: 'error'})
-    }
-    setIsUploading(false);
+    console.log(exif.load(await file.arrayBuffer()))
+    // setIsUploading(true);
+    // try {
+    //   const res = await Amplify.Storage.put(`images/${uuidv4()}`, file, { acl: 'public-read' });
+    //   const fres = await API.post(imageAPI, imgaePath, { body: {
+    //     name: file.name,
+    //     bucket: aws.aws_user_files_s3_bucket,
+    //     path: res.key,
+    //   }});
+    //   console.log(fres);
+    //   img.current.src = '';
+    //   input.current.value = null;
+    // } catch (e) {
+    //   enqueueSnackbar(e.message, {variant: 'error'})
+    // }
+    // setIsUploading(false);
   }
 
   return (

@@ -88,7 +88,7 @@ const parseRDSdata = (input) => {
               },
             ]
           });
-          result = await rdsClient.send(command);;
+          result = await rdsClient.send(command);
           // result = await s3Client.send(new PutObjectCommand({
           //   ...s3Params,
           //   Key: 'images/test.txt',

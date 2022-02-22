@@ -14,6 +14,11 @@
       "service": "Lambda",
       "providerPlugin": "awscloudformation",
       "build": true
+    },
+    "S3Trigger1d9e3ad2": {
+      "service": "Lambda",
+      "providerPlugin": "awscloudformation",
+      "build": true
     }
   },
   "api": {
@@ -86,7 +91,7 @@
       "dependsOn": [
         {
           "category": "function",
-          "resourceName": "S3Triggerfc320ce6",
+          "resourceName": "S3Trigger1d9e3ad2",
           "attributes": [
             "Name",
             "Arn",

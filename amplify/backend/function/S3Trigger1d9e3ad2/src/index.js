@@ -53,9 +53,9 @@ exports.handler = async function (event) {
             value: { stringValue: Bucket }
           }
         ]
-        // const command = new ExecuteStatementCommand({ ...rdsParams, sql, parameters });
-        // result = await rdsClient.send(command);
-        console.log(exifData)
+        const command = new ExecuteStatementCommand({ ...rdsParams, sql, parameters });
+        result = await rdsClient.send(command);
+        console.log(result)
       }
     } catch (e) {
       console.log('Error: ' + e.message)
