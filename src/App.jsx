@@ -19,6 +19,7 @@ const imageAPI = 'images';
 const imgaePath = '/images';
 
 function App() {
+  const [isUploading, setIsUploading] = useState(false);
   const [value, setValue] = useState('1');
   const handleChange = (event, newValue) => {
     setValue(newValue);
@@ -37,9 +38,10 @@ function App() {
   }
 
   const onClick = async (e) => {
+    const file = input.current.files[0];
+    if (!file) return;
+    setIsUploading(true);
     try {
-      const file = input.current.files[0];
-      if (!file) return;
       const res = await Amplify.Storage.put(`images/${uuidv4()}`, file, { acl: 'public-read' });
       const fres = await API.post(imageAPI, imgaePath, { body: {
         name: file.name,
@@ -52,6 +54,7 @@ function App() {
     } catch (e) {
       enqueueSnackbar(e.message, {variant: 'error'})
     }
+    setIsUploading(false);
   }
 
   return (
@@ -67,7 +70,7 @@ function App() {
         <TabPanel value="1">
           <div>
             <input type="file" accept="image/png, image/jpeg" onChange={onChange} ref={input} />
-            <button onClick={onClick}>Загрузить</button>
+            <button onClick={onClick} disabled={isUploading} >Загрузить</button>
           </div>
           <img ref={img} alt=''/>
         </TabPanel>
