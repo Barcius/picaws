@@ -4,8 +4,13 @@ import { useState, useEffect, useRef } from 'react';
 import { v4 as uuidv4 } from 'uuid';
 import aws from "./aws-exports";
 import { useSnackbar } from 'notistack';
+import Box from '@mui/material/Box';
+import Tab from '@mui/material/Tab';
+import TabContext from '@mui/lab/TabContext';
+import TabList from '@mui/lab/TabList';
+import TabPanel from '@mui/lab/TabPanel';
+import ImageList from './ImageList';
 
-const bucketUrl = `https://${aws.aws_user_files_s3_bucket}.s3.${aws.aws_user_files_s3_bucket_region}.amazonaws.com/`
 
 const testAPI = "test";
 const path = "/test";
@@ -14,7 +19,12 @@ const imageAPI = 'images';
 const imgaePath = '/images';
 
 function App() {
-  const { enqueueSnackbar, closeSnackbar } = useSnackbar();
+  const [value, setValue] = useState('1');
+  const handleChange = (event, newValue) => {
+    setValue(newValue);
+  };
+
+  const { enqueueSnackbar } = useSnackbar();
   const input = useRef();
   const img = useRef();
 
@@ -29,6 +39,7 @@ function App() {
   const onClick = async (e) => {
     try {
       const file = input.current.files[0];
+      if (!file) return;
       const res = await Amplify.Storage.put(`images/${uuidv4()}`, file, { acl: 'public-read' });
       const fres = await API.post(imageAPI, imgaePath, { body: {
         name: file.name,
@@ -45,11 +56,26 @@ function App() {
 
   return (
     <div className="App">
-      <div>
-        <input type="file" accept="image/png, image/jpeg" onChange={onChange} ref={input} />
-        <button onClick={onClick}>загрузить</button>
-      </div>
-      <img ref={img} />
+      <Box sx={{ width: '100%', typography: 'body1' }}>
+      <TabContext value={value}>
+        <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
+          <TabList onChange={handleChange}>
+            <Tab label="Загрузить" value="1" />
+            <Tab label="Просмотреть" value="2" />
+          </TabList>
+        </Box>
+        <TabPanel value="1">
+          <div>
+            <input type="file" accept="image/png, image/jpeg" onChange={onChange} ref={input} />
+            <button onClick={onClick}>Загрузить</button>
+          </div>
+          <img ref={img} alt=''/>
+        </TabPanel>
+        <TabPanel value="2">
+          <ImageList />
+        </TabPanel>
+      </TabContext>
+    </Box>
     </div>
   );
 }
